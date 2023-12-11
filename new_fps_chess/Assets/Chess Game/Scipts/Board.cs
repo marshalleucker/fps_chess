@@ -16,6 +16,7 @@ public class Board : MonoBehaviour
     private ChessGameController chessController;
     private SquareSelectorCreator squareSelector;
 
+
     private void Awake()
     {
         squareSelector = GetComponent<SquareSelectorCreator>();
@@ -26,6 +27,8 @@ public class Board : MonoBehaviour
     {
         this.chessController = chessController;
     }
+
+
 
     private void CreateGrid()
     {
@@ -39,8 +42,8 @@ public class Board : MonoBehaviour
 
     private Vector2Int CalculateCoordsFromPosition(Vector3 inputPosition)
     {
-        int x = Mathf.FloorToInt(transform.InverseTransformPoint(inputPosition).x / squareSize) + (BOARD_SIZE / 2);
-        int y = Mathf.FloorToInt(transform.InverseTransformPoint(inputPosition).z / squareSize) + (BOARD_SIZE / 2);
+        int x = Mathf.FloorToInt(transform.InverseTransformPoint(inputPosition).x / squareSize) + BOARD_SIZE / 2;
+        int y = Mathf.FloorToInt(transform.InverseTransformPoint(inputPosition).z / squareSize) + BOARD_SIZE / 2;
         return new Vector2Int(x, y);
     }
 
@@ -48,7 +51,6 @@ public class Board : MonoBehaviour
     {
         Vector2Int coords = CalculateCoordsFromPosition(inputPosition);
         Piece piece = GetPieceOnSquare(coords);
-
         if (selectedPiece)
         {
             if (piece != null && selectedPiece == piece)
@@ -65,6 +67,32 @@ public class Board : MonoBehaviour
         }
     }
 
+
+
+    private void SelectPiece(Piece piece)
+    {
+        selectedPiece = piece;
+        List<Vector2Int> selection = selectedPiece.availableMoves;
+        ShowSelectionSquares(selection);
+    }
+
+    private void ShowSelectionSquares(List<Vector2Int> selection)
+    {
+        Dictionary<Vector3, bool> squaresData = new Dictionary<Vector3, bool>();
+        for (int i = 0; i < selection.Count; i++)
+        {
+            Vector3 position = CalculatePositionFromCoords(selection[i]);
+            bool isSquareFree = GetPieceOnSquare(selection[i]) == null;
+            squaresData.Add(position, isSquareFree);
+        }
+        squareSelector.ShowSelection(squaresData);
+    }
+
+    private void DeselectPiece()
+    {
+        selectedPiece = null;
+        squareSelector.ClearSelection();
+    }
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
     {
         UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
@@ -80,44 +108,14 @@ public class Board : MonoBehaviour
 
     private void UpdateBoardOnPieceMove(Vector2Int newCoords, Vector2Int oldCoords, Piece newPiece, Piece oldPiece)
     {
-        // This grid is going to be important to get the pieces from for the FPS event
-
         grid[oldCoords.x, oldCoords.y] = oldPiece;
         grid[newCoords.x, newCoords.y] = newPiece;
-    }
-
-    private void SelectPiece(Piece piece)
-    {
-        selectedPiece = piece;
-        List<Vector2Int> selection = selectedPiece.availableMoves;
-        ShowSelectionSquares(selection);
-    }
-
-    private void ShowSelectionSquares(List<Vector2Int> selection)
-    {
-        Dictionary<Vector3, bool> squaresData = new Dictionary<Vector3, bool>();
-
-        for (int i = 0; i < selection.Count; i++)
-        {
-            Vector3 position = CalculatePositionFromCoords(selection[i]);
-            bool isSquareFree = GetPieceOnSquare(selection[i]) == null;
-            squaresData.Add(position, isSquareFree);
-        }
-
-        squareSelector.ShowSelection(squaresData);
-    }
-
-    private void DeselectPiece()
-    {
-        selectedPiece = null;
-        squareSelector.ClearSelection();
     }
 
     public Piece GetPieceOnSquare(Vector2Int coords)
     {
         if (CheckIfCoordinatesAreOnBoard(coords))
             return grid[coords.x, coords.y];
-
         return null;
     }
 
@@ -125,7 +123,6 @@ public class Board : MonoBehaviour
     {
         if (coords.x < 0 || coords.y < 0 || coords.x >= BOARD_SIZE || coords.y >= BOARD_SIZE)
             return false;
-
         return true;
     }
 
@@ -139,7 +136,6 @@ public class Board : MonoBehaviour
                     return true;
             }
         }
-
         return false;
     }
 
@@ -148,4 +144,5 @@ public class Board : MonoBehaviour
         if (CheckIfCoordinatesAreOnBoard(coords))
             grid[coords.x, coords.y] = piece;
     }
+
 }

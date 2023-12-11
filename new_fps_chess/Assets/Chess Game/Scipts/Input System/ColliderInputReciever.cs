@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ColliderInputReceiver : InputReceiver
+public class ColliderInputReciever : InputReciever
 {
     private Vector3 clickPosition;
-
-    private void Update()
+    void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -16,12 +15,12 @@ public class ColliderInputReceiver : InputReceiver
             if (Physics.Raycast(ray, out hit))
             {
                 clickPosition = hit.point;
-                OnInputReceived();
+                OnInputRecieved();
             }
         }
     }
 
-    public override void OnInputReceived()
+    public override void OnInputRecieved()
     {
         foreach (var handler in inputHandlers)
         {

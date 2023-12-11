@@ -3,27 +3,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(PieceCreator))]
+[RequireComponent(typeof(PiecesCreator))]
 public class ChessGameController : MonoBehaviour
 {
     [SerializeField] private BoardLayout startingBoardLayout;
     [SerializeField] private Board board;
 
-    private PieceCreator pieceCreator;
-
+    private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
     private ChessPlayer blackPlayer;
     private ChessPlayer activePlayer;
 
-
     private void Awake()
     {
         SetDependencies();
+        CreatePlayers();
     }
 
     private void SetDependencies()
     {
-        pieceCreator = GetComponent<PieceCreator>();
+        pieceCreator = GetComponent<PiecesCreator>();
     }
 
     private void CreatePlayers()
@@ -31,7 +30,6 @@ public class ChessGameController : MonoBehaviour
         whitePlayer = new ChessPlayer(TeamColor.White, board);
         blackPlayer = new ChessPlayer(TeamColor.Black, board);
     }
-
 
     private void Start()
     {
@@ -41,11 +39,12 @@ public class ChessGameController : MonoBehaviour
     private void StartNewGame()
     {
         board.SetDependencies(this);
-        CreatePlayers();
         CreatePiecesFromLayout(startingBoardLayout);
         activePlayer = whitePlayer;
         GenerateAllPossiblePlayerMoves(activePlayer);
     }
+
+
 
     private void CreatePiecesFromLayout(BoardLayout layout)
     {
@@ -59,6 +58,8 @@ public class ChessGameController : MonoBehaviour
             CreatePieceAndInitialize(squareCoords, team, type);
         }
     }
+
+
 
     private void CreatePieceAndInitialize(Vector2Int squareCoords, TeamColor team, Type type)
     {

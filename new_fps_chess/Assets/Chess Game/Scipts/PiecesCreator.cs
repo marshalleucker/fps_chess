@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PieceCreator : MonoBehaviour
+public class PiecesCreator : MonoBehaviour
 {
     [SerializeField] private GameObject[] piecesPrefabs;
     [SerializeField] private Material blackMaterial;
