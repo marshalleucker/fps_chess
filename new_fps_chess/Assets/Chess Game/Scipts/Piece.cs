@@ -82,4 +82,5 @@ public class Piece : MonoBehaviour
         this.board = board;
         transform.position = board.CalculatePositionFromCoords(coords);
     }
+
 }

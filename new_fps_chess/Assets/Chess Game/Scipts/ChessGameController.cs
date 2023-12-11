@@ -9,6 +9,7 @@ public class ChessGameController : MonoBehaviour
 
     [SerializeField] private BoardLayout startingBoardLayout;
     [SerializeField] private Board board;
+    [SerializeField] private ChessUIManager uiManager;
 
     private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
@@ -40,6 +41,7 @@ public class ChessGameController : MonoBehaviour
 
     private void StartNewGame()
     {
+        uiManager.HideUI();
         SetGameState(GameState.Init);
         board.SetDependencies(this);
         CreatePiecesFromLayout(startingBoardLayout);
@@ -48,6 +50,21 @@ public class ChessGameController : MonoBehaviour
         SetGameState(GameState.Play);
     }
 
+    public void RestartGame()
+    {
+        DestroyPieces();
+        board.OnGameRestarted();
+        whitePlayer.OnGameRestarted();
+        blackPlayer.OnGameRestarted();
+        StartNewGame();
+
+    }
+
+    private void DestroyPieces()
+    {
+        whitePlayer.activePieces.ForEach(p => Destroy(p.gameObject));
+        blackPlayer.activePieces.ForEach(p => Destroy(p.gameObject));   
+    }
     private void SetGameState(GameState state)
     {
         this.state = state;
@@ -99,23 +116,28 @@ public class ChessGameController : MonoBehaviour
     {
         GenerateAllPossiblePlayerMoves(activePlayer);
         GenerateAllPossiblePlayerMoves(GetOpponentToPlayer(activePlayer));
-        ChangeActiveTeam();
         if (CheckIfGameIsFinished())
+        {
             EndGame();
+        }
+        else
+        {
+            ChangeActiveTeam();
+        }
     }
 
     // Finds if enemy King is under attack then checks if it can move
     private bool CheckIfGameIsFinished()
     {
-        Piece[] kingAttackingPieces = activePlayer.GetPiecesAttackingOppositePieceOfType<King>();
+        Piece[] kingAttackingPieces = activePlayer.GetPieceAtackingOppositePiceOfType<King>();
         if (kingAttackingPieces.Length > 0)
         {
             ChessPlayer oppositePlayer = GetOpponentToPlayer(activePlayer);
             Piece attackedKing = oppositePlayer.GetPiecesOfType<King>().FirstOrDefault();
-            oppositePlayer.RemoveMovesEnablingAttackOnPiece<King>(activePlayer, attackedKing);
+            oppositePlayer.RemoveMovesEnablingAttakOnPieceOfType<King>(activePlayer, attackedKing);
 
-            int availableKingMoves = attackedKing.availableMoves.Count;
-            if (availableKingMoves == 0)
+            int avaliableKingMoves = attackedKing.availableMoves.Count;
+            if (avaliableKingMoves == 0)
             {
                 bool canCoverKing = oppositePlayer.CanHidePieceFromAttack<King>(activePlayer);
                 if (!canCoverKing)
@@ -128,6 +150,7 @@ public class ChessGameController : MonoBehaviour
     private void EndGame()
     {
         SetGameState(GameState.Finished);
+        uiManager.OnGameFinished(activePlayer.team.ToString());
     }
 
     internal void OnPieceRemoved(Piece piece)
@@ -147,8 +170,8 @@ public class ChessGameController : MonoBehaviour
         return player == whitePlayer ? blackPlayer : whitePlayer;
     }
 
-    public void RemoveMovesEnablingAttackOnPieceOfType<T>(Piece piece) where T : Piece
+    public void RemoveMovesEnablingAttakOnPieceOfType<T>(Piece piece) where T : Piece
     {
-        activePlayer.RemoveMovesEnablingAttackOnPiece<T>(GetOpponentToPlayer(activePlayer), piece);
+        activePlayer.RemoveMovesEnablingAttakOnPieceOfType<T>(GetOpponentToPlayer(activePlayer), piece);
     }
 }

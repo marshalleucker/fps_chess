@@ -38,7 +38,7 @@ public class ChessPlayer
         }
     }
 
-    public Piece[] GetPiecesAttackingOppositePieceOfType<T>() where T : Piece
+    public Piece[] GetPieceAtackingOppositePiceOfType<T>() where T : Piece
     {
         return activePieces.Where(p => p.IsAttackingPieceOfType<T>()).ToArray();
     }
@@ -48,7 +48,7 @@ public class ChessPlayer
         return activePieces.Where(p => p is T).ToArray();
     }
 
-    public void RemoveMovesEnablingAttackOnPiece<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
+    public void RemoveMovesEnablingAttakOnPieceOfType<T>(ChessPlayer opponent, Piece selectedPiece) where T : Piece
     {
         List<Vector2Int> coordsToRemove = new List<Vector2Int>();
         foreach (var coords in selectedPiece.availableMoves)
@@ -64,6 +64,11 @@ public class ChessPlayer
         {
             selectedPiece.availableMoves.Remove(coords);
         }
+    }
+
+    internal void OnGameRestarted()
+    {
+        activePieces.Clear();
     }
 
     private bool CheckIfIsAttackingPiece<T>() where T : Piece

@@ -45,6 +45,12 @@ public class Board : MonoBehaviour
         return new Vector2Int(x, y);
     }
 
+    internal void OnGameRestarted()
+    {
+        selectedPiece = null;
+        CreateGrid();
+    }
+
     public void OnSquareSelected(Vector3 inputPosition)
     {
         if (!chessController.IsGameInProgress())
@@ -70,7 +76,7 @@ public class Board : MonoBehaviour
 
     private void SelectPiece(Piece piece)
     {
-        chessController.RemoveMovesEnablingAttackOnPieceOfType<King>(piece);
+        chessController.RemoveMovesEnablingAttakOnPieceOfType<King>(piece);
         selectedPiece = piece;
         List<Vector2Int> selection = selectedPiece.availableMoves;
         ShowSelectionSquares(selection);
