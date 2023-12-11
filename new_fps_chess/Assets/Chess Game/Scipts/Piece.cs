@@ -39,6 +39,18 @@ public class Piece : MonoBehaviour
         return null;
     }
 
+    // Iterate through available moves to find any pieces of type T
+    // Only enemy pieces are listed as available moves
+    internal bool IsAttackingPieceOfType<T>() where T : Piece
+    {
+        foreach (var square in availableMoves)
+        {
+            if (board.GetPieceOnSquare(square) is T)
+                return true;
+        }
+        return false;
+    }
+
     public bool IsFromSameTeam(Piece piece)
     {
         return team == piece.team;
