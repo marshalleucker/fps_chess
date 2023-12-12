@@ -58,12 +58,6 @@ public class PieceShooting : MonoBehaviour
         return SceneManager.GetActiveScene().name == "CombatScene";
     }
 
-    bool CheckIfTakenPiece()
-    {
-        // Implement your logic to check if this is the taken piece
-        return GameData.instance.takenPiece == this.gameObject;
-    }
-
     void SetFireRates()
     {
         switch (pieceType)
