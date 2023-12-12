@@ -1,10 +1,14 @@
+<<<<<<< Updated upstream
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+=======
+>>>>>>> Stashed changes
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+<<<<<<< Updated upstream
     [SerializeField] private float groundedMoveSpeed = 5f;
     [SerializeField] private float flyingMoveSpeed = 8f;
     [SerializeField] private float jumpForce = 225f;
@@ -34,16 +38,28 @@ public class PlayerMovement : MonoBehaviour
     private bool isFlying = false;
     //property, basically works like a getter function
     public bool IsFlying{ get{ return isFlying; } }
+=======
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float jumpForce = 7f;
+    [SerializeField] private LayerMask groundLayer; // LayerMask to determine what is considered ground
+
+    private Rigidbody playerRigidbody;
+    private bool isGrounded;
+>>>>>>> Stashed changes
 
     void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody>();
+<<<<<<< Updated upstream
         fuelSystem = GetComponent<FuelSystem>();
         playerHealth = GetComponent<Health>();
+=======
+>>>>>>> Stashed changes
     }
 
     void Update()
     {
+<<<<<<< Updated upstream
         //check if the player is dead, if so don't allow movement
         if(playerHealth.IsDead){ 
             isFlying = false;
@@ -148,4 +164,62 @@ public class PlayerMovement : MonoBehaviour
         playerRigidbody.velocity = clampedVerticalVelocity;
     }
 
+=======
+        MovePlayer();
+        RotateWithCamera();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
+        }
+    }
+
+    void RotateWithCamera()
+    {
+        Vector3 cameraForward = Camera.main.transform.forward;
+        cameraForward.y = 0; // Remove vertical component
+        cameraForward.Normalize();
+
+        if (cameraForward != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(cameraForward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * moveSpeed);
+        }
+    }
+
+
+    void MovePlayer()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveZ = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(moveX, 0f, moveZ) * moveSpeed;
+        Vector3 newPosition = playerRigidbody.position + movement * Time.deltaTime;
+        playerRigidbody.MovePosition(newPosition);
+    }
+
+    void Jump()
+    {
+        if (isGrounded)
+        {
+            playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if ((groundLayer.value & (1 << collision.gameObject.layer)) > 0)
+        {
+            isGrounded = true;
+        }
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        if ((groundLayer.value & (1 << collision.gameObject.layer)) > 0)
+        {
+            isGrounded = false;
+        }
+    }
+>>>>>>> Stashed changes
 }

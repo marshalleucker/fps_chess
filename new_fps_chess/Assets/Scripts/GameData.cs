@@ -21,7 +21,7 @@ public class PieceData
     private void DestroyPiece()
     {
         // Logic to remove the piece from both scenes
-        GameManager.instance.RemovePieceFromBothScenes(this);
+        //GameManager.instance.RemovePieceFromBothScenes(this);
     }
 }
 

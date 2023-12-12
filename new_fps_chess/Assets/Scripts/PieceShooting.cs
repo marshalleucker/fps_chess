@@ -8,6 +8,7 @@ public class PieceShooting : MonoBehaviour
     public GameObject projectilePrefab;
     public Transform firePoint;
     public string pieceType; // Assign this in the Inspector or dynamically
+    public Transform playerTransform; // Assign the player's transform in the Inspector
 
     private float fireTimer;
     private float fireRate;
@@ -16,7 +17,7 @@ public class PieceShooting : MonoBehaviour
     void Start()
     {
         // Check if the piece is in the combat scene and is the taken piece
-        isInCombatScene = CheckIfInCombatScene() && CheckIfTakenPiece();
+        isInCombatScene = CheckIfInCombatScene(); // && CheckIfTakenPiece();
 
         // Set fire rates based on piece type
         SetFireRates();
@@ -24,7 +25,10 @@ public class PieceShooting : MonoBehaviour
 
     void Update()
     {
-        if (!isInCombatScene) return;
+        if (!isInCombatScene || playerTransform == null) return;
+
+        // Rotate towards the player
+        RotateTowardsPlayer();
 
         fireTimer += Time.deltaTime;
 
@@ -142,6 +146,13 @@ public class PieceShooting : MonoBehaviour
     {
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, Quaternion.identity);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
-        rb.velocity = direction.normalized * 10f; // Adjust the speed as needed
+        rb.velocity = direction.normalized * 100f; // Adjust the speed as needed
+    }
+    void RotateTowardsPlayer()
+    {
+        Vector3 directionToPlayer = playerTransform.position - transform.position;
+        directionToPlayer.y = 0; // Ensure rotation only around Y-axis
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 5f); // Adjust the rotation speed as needed
     }
 }
