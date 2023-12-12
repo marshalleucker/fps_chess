@@ -74,6 +74,12 @@ public class Board : MonoBehaviour
         }
     }
 
+    public void PromotePiece(Piece piece)
+    {
+        TakePiece(piece);
+        chessController.CreatePieceAndInitialize(piece.occupiedSquare, piece.team, typeof(Queen));
+    }
+
     private void SelectPiece(Piece piece)
     {
         chessController.RemoveMovesEnablingAttakOnPieceOfType<King>(piece);
