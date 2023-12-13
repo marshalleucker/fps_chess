@@ -13,6 +13,8 @@ public class PieceShooting : MonoBehaviour
     private float fireRate;
     private bool isInCombatScene;
 
+    public SceneChanger sceneChanger;
+
     void Start()
     {
         // Check if the piece is in the combat scene and is the taken piece

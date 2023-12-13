@@ -156,7 +156,7 @@ public class ChessGameController : MonoBehaviour
         uiManager.OnGameFinished(activePlayer.team.ToString());
     }
 
-    internal void OnPieceRemoved(Piece piece)
+    public void OnPieceRemoved(Piece piece)
     {
         ChessPlayer pieceOwner = (piece.team == TeamColor.White) ? whitePlayer : blackPlayer;
         pieceOwner.RemovePiece(piece);

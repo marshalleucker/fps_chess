@@ -18,6 +18,8 @@ public class Piece : MonoBehaviour
 
     private InstantTweener tweener;
 
+    private int health;
+
     private void Awake()
     {
         availableMoves = new List<Vector2Int>();
