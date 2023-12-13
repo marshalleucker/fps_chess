@@ -120,7 +120,8 @@ public class Board : MonoBehaviour
     {
         Piece piece = GetPieceOnSquare(coords);
         if (piece != null && !selectedPiece.IsFromSameTeam(piece))
-            sceneChanger.ChangeToCombat(selectedPiece, piece, grid);
+            TakePiece(piece);
+            //sceneChanger.ChangeToCombat(selectedPiece, piece, coords);
     }
 
     private void TakePiece(Piece piece)
