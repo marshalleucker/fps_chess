@@ -11,7 +11,6 @@ public class Board : MonoBehaviour
     [SerializeField] private Transform bottomLeftSquareTransform;
     [SerializeField] private float squareSize;
 
-    [SerializeField] private PieceHolder_SO pieceHolder;
     [SerializeField] private SceneChanger sceneChanger;
 
     private Piece[,] grid;
@@ -120,14 +119,8 @@ public class Board : MonoBehaviour
     private void TryToTakeOppositePiece(Vector2Int coords)
     {
         Piece piece = GetPieceOnSquare(coords);
-        //Debug.Log(piece);
-        //Debug.Log(selectedPiece);
         if (piece != null && !selectedPiece.IsFromSameTeam(piece))
-        {
-            pieceHolder.SetPieces(selectedPiece, piece);
-            sceneChanger.ChangeScenes("CombatScene");
-        }
-            //TakePiece(piece);
+            sceneChanger.ChangeToCombat(selectedPiece, piece, grid);
     }
 
     private void TakePiece(Piece piece)
