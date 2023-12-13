@@ -101,7 +101,7 @@ public class Board : MonoBehaviour
         squareSelector.ShowSelection(squaresData);
     }
 
-    private void DeselectPiece()
+    public void DeselectPiece()
     {
         selectedPiece = null;
         squareSelector.ClearSelection();
@@ -120,11 +120,11 @@ public class Board : MonoBehaviour
     {
         Piece piece = GetPieceOnSquare(coords);
         if (piece != null && !selectedPiece.IsFromSameTeam(piece))
-            TakePiece(piece);
-            //sceneChanger.ChangeToCombat(selectedPiece, piece, coords);
+            //TakePiece(piece);
+            sceneChanger.ChangeToCombat(selectedPiece, piece, coords);
     }
 
-    private void TakePiece(Piece piece)
+    public void TakePiece(Piece piece)
     {
         if (piece)
         {
@@ -133,7 +133,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void EndTurn()
+    public void EndTurn()
     {
         chessController.EndTurn();
     }
