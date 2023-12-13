@@ -20,7 +20,7 @@ public class SceneChanger : MonoBehaviour
 
     public void ChangeToChess(Piece losingPiece)
     {
-        SceneManager.LoadScene("ChessScene");
+        SceneManager.LoadScene("SampleScene");
         board.TakePiece(losingPiece);
         board.UpdateBoardOnPieceMove(coords, friendlyPiece.occupiedSquare, friendlyPiece, null);
         friendlyPiece.MovePiece(coords);
