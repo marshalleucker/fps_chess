@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - GameMusic
+  - Bullet
   layers:
   - Default
   - TransparentFX

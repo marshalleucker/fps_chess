@@ -161,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bottomLeftSquareTransform: {fileID: 3625979071812927719}
   squareSize: 1.5
+  sceneChanger: {fileID: 0}
 --- !u!114 &7492535997918624566
 MonoBehaviour:
   m_ObjectHideFlags: 0

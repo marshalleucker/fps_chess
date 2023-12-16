@@ -41,5 +41,7 @@ public class Gun : MonoBehaviour
 
         // Debug line to visualize the forward direction in world space
         Debug.DrawLine(bullet.transform.position, bullet.transform.position + worldSpaceForward * 10, Color.red, 2);
+
+
     }
 }

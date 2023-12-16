@@ -99,11 +99,22 @@ public class EnemyAiTutorial : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    public void TakeDamage(int damage)
+    void OnCollisionEnter(Collision collision)
     {
-        health -= damage;
+        // Check if the object we collided with has the tag 'Bullet'
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            health -= 1; // Subtract 1 from health
 
-        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+            // Optional: Destroy the bullet on collision
+            Destroy(collision.gameObject);
+
+            if (health <= 0)
+            {
+                // Handle the death of the object, e.g., destroy it
+                Destroy(gameObject);
+            }
+        }
     }
     private void DestroyEnemy()
     {
