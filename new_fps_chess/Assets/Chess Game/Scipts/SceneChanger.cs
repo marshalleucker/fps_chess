@@ -20,11 +20,16 @@ public class SceneChanger : MonoBehaviour
 
     public void ChangeToChess(Piece losingPiece)
     {
-        SceneManager.LoadScene("SampleScene", LoadSceneMode.Additive);
         SceneManager.UnloadSceneAsync("CombatScene");
+        Vector2Int occupied = friendlyPiece.occupiedSquare;
         board.TakePiece(losingPiece);
-        board.UpdateBoardOnPieceMove(coords, friendlyPiece.occupiedSquare, friendlyPiece, null);
-        friendlyPiece.MovePiece(coords);
+        if (losingPiece == friendlyPiece)
+            board.UpdateBoardOnPieceMove(coords, occupied, enemyPiece, null);
+        else
+        {
+            board.UpdateBoardOnPieceMove(coords, friendlyPiece.occupiedSquare, friendlyPiece, null);
+            friendlyPiece.MovePiece(coords);
+        }
         board.DeselectPiece();
         board.EndTurn();
     }

@@ -1114,6 +1114,8 @@ MonoBehaviour:
     health: 0
     attack: 0
     pieceGameObject: {fileID: 0}
+  takerPiece_: {fileID: 0}
+  takenPiece_: {fileID: 0}
   sceneChanger: {fileID: 0}
 --- !u!4 &1013694136
 Transform:
