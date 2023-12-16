@@ -44,23 +44,15 @@ public class GameData : MonoBehaviour
     public Dictionary<string, PieceData> piecesDictionary = new Dictionary<string, PieceData>();
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else if (instance != this)
-        {
-            Destroy(gameObject);
-        }
-
         sceneChanger = FindObjectOfType<SceneChanger>();
         takerPiece_ = sceneChanger.friendlyPiece;
         takenPiece_ = sceneChanger.enemyPiece;
-        piecesDictionary.Add(takerPiece.pieceType, takerPiece);
-        piecesDictionary.Add(takenPiece.pieceType, takenPiece);
+        //piecesDictionary.Add(takerPiece.pieceType, takerPiece);
+        //piecesDictionary.Add(takenPiece.pieceType, takenPiece);
 
-        //Invoke("ChangeToChess", 10f);
+        Debug.Log("Test");
+
+        Invoke("ChangeToChess", 5f);
     }
 
     public void DestroyPiece(string pieceIdentifier)
@@ -72,7 +64,7 @@ public class GameData : MonoBehaviour
 
             piecesDictionary.Remove(pieceIdentifier);
 
-            ChangeToChess();
+            //ChangeToChess();
         }
     }
 
