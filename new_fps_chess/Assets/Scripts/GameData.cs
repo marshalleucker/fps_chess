@@ -11,7 +11,12 @@ public class PieceData
     public int health;
     public int attack;
     public GameObject pieceGameObject;
-    // Add more stats as needed
+    private GameData gameData;
+
+    public void Initialize(GameData gameDataReference)
+    {
+        gameData = gameDataReference;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -19,10 +24,9 @@ public class PieceData
         if (health <= 0) DestroyPiece();
     }
 
-    private void DestroyPiece()
+    public void DestroyPiece()
     {
-        // Logic to remove the piece from both scenes
-
+        gameData.DestroyPiece(pieceType);
     }
 }
 
@@ -37,7 +41,7 @@ public class GameData : MonoBehaviour
     [SerializeField] private Piece takenPiece_;
 
     [SerializeField] private SceneChanger sceneChanger;
-
+    public Dictionary<string, PieceData> piecesDictionary = new Dictionary<string, PieceData>();
     void Awake()
     {
         if (instance == null)
@@ -53,11 +57,26 @@ public class GameData : MonoBehaviour
         sceneChanger = FindObjectOfType<SceneChanger>();
         takerPiece_ = sceneChanger.friendlyPiece;
         takenPiece_ = sceneChanger.enemyPiece;
+        piecesDictionary.Add(takerPiece.pieceType, takerPiece);
+        piecesDictionary.Add(takenPiece.pieceType, takenPiece);
 
-        Invoke("ChangeToChess", 3f);
+        //Invoke("ChangeToChess", 10f);
     }
 
-    private void ChangeToChess()
+    public void DestroyPiece(string pieceIdentifier)
+    {
+        if (piecesDictionary.ContainsKey(pieceIdentifier))
+        {
+            PieceData piece = piecesDictionary[pieceIdentifier];
+            Destroy(piece.pieceGameObject);
+
+            piecesDictionary.Remove(pieceIdentifier);
+
+            ChangeToChess();
+        }
+    }
+
+    public void ChangeToChess()
     {
         sceneChanger.ChangeToChess(takenPiece_);
     }

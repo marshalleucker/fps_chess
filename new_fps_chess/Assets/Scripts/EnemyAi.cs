@@ -10,7 +10,7 @@ public class EnemyAiTutorial : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
-    public float health;
+    public float health = 3;
 
     //Patroling
     public Vector3 walkPoint;
@@ -25,6 +25,13 @@ public class EnemyAiTutorial : MonoBehaviour
     //States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
+
+    public GameObject pawnPrefab;
+    public GameObject rookPrefab;
+    public GameObject knightPrefab;
+    public GameObject queenPrefab;
+    public GameObject bishopPrefab;
+
 
     private void Awake()
     {
@@ -44,7 +51,25 @@ public class EnemyAiTutorial : MonoBehaviour
         if (playerInSightRange && !playerInAttackRange) ChasePlayer();
         if (playerInAttackRange && playerInSightRange) AttackPlayer();
     }
+    private GameObject GetPiecePrefab(string pieceType)
+    {
+        switch (pieceType)
+        {
+            case "Pawn":
+                return pawnPrefab;
+            case "Rook":
+                return rookPrefab;
+            case "Knight":
+                return knightPrefab;
+            case "Queen":
+                return queenPrefab;
+            case "Bishop":
+                return bishopPrefab;
 
+            default:
+                return null;
+        }
+    }
     private void Patroling()
     {
         if (!walkPointSet) SearchWalkPoint();
@@ -99,26 +124,32 @@ public class EnemyAiTutorial : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    void OnCollisionEnter(Collision collision)
+    public void TakeDamage(int damage)
     {
-        // Check if the object we collided with has the tag 'Bullet'
-        if (collision.gameObject.CompareTag("Bullet"))
+        health -= damage;
+        if (health <= 0)
         {
-            health -= 1; // Subtract 1 from health
-
-            // Optional: Destroy the bullet on collision
-            Destroy(collision.gameObject);
-
-            if (health <= 0)
+            string takenPieceType = GameData.instance.takenPiece.pieceType;
+            GameObject newPiecePrefab = GetPiecePrefab(takenPieceType);
+            if (newPiecePrefab != null)
             {
-                // Handle the death of the object, e.g., destroy it
-                Destroy(gameObject);
+                Instantiate(newPiecePrefab, transform.position, transform.rotation);
             }
+            Destroy(gameObject);
         }
     }
     private void DestroyEnemy()
     {
         Destroy(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Bullet"))
+        {
+            TakeDamage(1);
+            Destroy(other.gameObject);
+        }
     }
 
     private void OnDrawGizmosSelected()
