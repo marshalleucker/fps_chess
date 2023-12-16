@@ -28,8 +28,10 @@ public class EnemyAiTutorial : MonoBehaviour
 
     private void Awake()
     {
-        player = GameObject.Find("PlayerObj").transform;
+        player = GameObject.Find("PlayerCapsule").transform;
         agent = GetComponent<NavMeshAgent>();
+        whatIsPlayer = LayerMask.GetMask("PlayerLayer");
+        whatIsGround = LayerMask.GetMask("BoardLayer");
     }
 
     private void Update()

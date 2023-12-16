@@ -33,6 +33,11 @@ public class GameData : MonoBehaviour
     public PieceData takerPiece;
     public PieceData takenPiece;
 
+    [SerializeField] private Piece takerPiece_;
+    [SerializeField] private Piece takenPiece_;
+
+    [SerializeField] private SceneChanger sceneChanger;
+
     void Awake()
     {
         if (instance == null)
@@ -44,6 +49,17 @@ public class GameData : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        sceneChanger = FindObjectOfType<SceneChanger>();
+        takerPiece_ = sceneChanger.friendlyPiece;
+        takenPiece_ = sceneChanger.enemyPiece;
+
+        Invoke("ChangeToChess", 10f);
+    }
+
+    private void ChangeToChess()
+    {
+        sceneChanger.ChangeToChess(takenPiece_);
     }
 
     public void SetCombatData(PieceData taker, PieceData taken)
