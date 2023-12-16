@@ -5,20 +5,22 @@ using StarterAssets;
 
 public class Gun : MonoBehaviour
 {
-    // Start is called before the first frame update
     private StarterAssetsInputs _input;
-    [SerializeField] 
+    [SerializeField]
     private GameObject bulletPrefab;
     [SerializeField]
     private GameObject bulletPoint;
     [SerializeField]
     private float bulletSpeed = 600f;
+    [SerializeField] private AudioClip shootingSound;
+    private AudioSource audioSource;
+
     void Start()
     {
         _input = transform.root.GetComponent<StarterAssetsInputs>();
+        audioSource = GetComponent<AudioSource>(); // Initialize the audioSource variable
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (_input.shoot)
@@ -31,17 +33,19 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
         Debug.Log("shoot!");
-        GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, Quaternion.identity); // Use no rotation upon instantiation
+        GameObject bullet = Instantiate(bulletPrefab, bulletPoint.transform.position, Quaternion.identity);
 
-        // Calculate the correct world space forward direction
         Vector3 worldSpaceForward = bulletPoint.transform.TransformDirection(Vector3.forward);
 
-        bullet.GetComponent<Rigidbody>().AddForce(worldSpaceForward * bulletSpeed);
+        Rigidbody bulletRb = bullet.GetComponent<Rigidbody>();
+        bulletRb.AddForce(worldSpaceForward * bulletSpeed);
         Destroy(bullet, 2);
 
-        // Debug line to visualize the forward direction in world space
+        if (audioSource != null && shootingSound != null)
+        {
+            audioSource.PlayOneShot(shootingSound);
+        }
+
         Debug.DrawLine(bullet.transform.position, bullet.transform.position + worldSpaceForward * 10, Color.red, 2);
-
-
     }
 }
