@@ -17,7 +17,7 @@ public class ChessGameController : MonoBehaviour
     private PiecesCreator pieceCreator;
     private ChessPlayer whitePlayer;
     private ChessPlayer blackPlayer;
-    private ChessPlayer activePlayer;
+    public ChessPlayer activePlayer;
     private GameState state;
 
     private void Awake()

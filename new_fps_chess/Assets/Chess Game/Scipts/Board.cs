@@ -21,7 +21,6 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Test");
         squareSelector = GetComponent<SquareSelectorCreator>();
         CreateGrid();
     }
@@ -60,7 +59,6 @@ public class Board : MonoBehaviour
             return;
         Vector2Int coords = CalculateCoordsFromPosition(inputPosition);
         Piece piece = GetPieceOnSquare(coords);
-        Debug.Log(piece);
         if (selectedPiece)
         {
             if (piece != null && selectedPiece == piece)
@@ -111,10 +109,6 @@ public class Board : MonoBehaviour
     private void OnSelectedPieceMoved(Vector2Int coords, Piece piece)
     {
         TryToTakeOppositePiece(coords);
-        UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
-        selectedPiece.MovePiece(coords);
-        DeselectPiece();
-        EndTurn();
     }
 
     // Here is when the FPS stuff would come in
@@ -123,6 +117,16 @@ public class Board : MonoBehaviour
         Piece piece = GetPieceOnSquare(coords);
         if (piece != null && !selectedPiece.IsFromSameTeam(piece))
             sceneChanger.ChangeToCombat(selectedPiece, piece, coords);
+        else
+            AfterTakeMove(coords, selectedPiece);
+    }
+
+    public void AfterTakeMove(Vector2Int coords, Piece piece)
+    {
+        UpdateBoardOnPieceMove(coords, piece.occupiedSquare, piece, null);
+        selectedPiece.MovePiece(coords);
+        DeselectPiece();
+        EndTurn();
     }
 
     public void TakePiece(Piece piece)
@@ -137,6 +141,7 @@ public class Board : MonoBehaviour
     public void EndTurn()
     {
         chessController.EndTurn();
+        Debug.Log(chessController.activePlayer.team);
     }
 
     public void UpdateBoardOnPieceMove(Vector2Int newCoords, Vector2Int oldCoords, Piece newPiece, Piece oldPiece)

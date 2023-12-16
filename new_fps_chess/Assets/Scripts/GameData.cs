@@ -54,7 +54,7 @@ public class GameData : MonoBehaviour
         takerPiece_ = sceneChanger.friendlyPiece;
         takenPiece_ = sceneChanger.enemyPiece;
 
-        Invoke("ChangeToChess", 10f);
+        Invoke("ChangeToChess", 3f);
     }
 
     private void ChangeToChess()
